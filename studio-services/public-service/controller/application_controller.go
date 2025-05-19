@@ -165,6 +165,20 @@ func (c *ApplicationController) SearchApplicationHandler(w http.ResponseWriter, 
 	businessService := r.URL.Query().Get("businessService")
 	status := r.URL.Query().Get("status")
 	applicationNumber := r.URL.Query().Get("applicationNumber")
+	sortBy := r.URL.Query().Get("sortBy")
+	if limitStr := r.URL.Query().Get("limit"); limitStr != "" {
+		if limit, err := strconv.Atoi(limitStr); err == nil {
+			criteria.SearchCriteria.Limit = limit
+		}
+	}
+	if offsetStr := r.URL.Query().Get("offset"); offsetStr != "" {
+		if offset, err := strconv.Atoi(offsetStr); err == nil {
+			criteria.SearchCriteria.Offset = offset
+		}
+	}
+	if sortBy != "" {
+		criteria.SearchCriteria.SortBy = sortBy
+	}
 	if businessService != "" {
 		criteria.SearchCriteria.BusinessService = businessService
 	}
