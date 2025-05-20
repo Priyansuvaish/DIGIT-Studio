@@ -153,7 +153,11 @@ func (c *ApplicationController) SearchApplicationHandler(w http.ResponseWriter, 
 		utils.WriteErrorResponse(w, http.StatusBadRequest, "Missing header 'X-Tenant-Id'")
 		return
 	}
-
+	AuthToken := r.Header.Get("auth-token")
+	if AuthToken == "" {
+		http.Error(w, "auth-token header is required", http.StatusBadRequest)
+		return
+	}
 	if criteria.SearchCriteria.TenantId == "" {
 		criteria.SearchCriteria.TenantId = tenantID
 	}
@@ -196,7 +200,7 @@ func (c *ApplicationController) SearchApplicationHandler(w http.ResponseWriter, 
 	}
 	log.Println("inside search", criteria.SearchCriteria)
 	ctx := context.Background()
-	res, err := c.service.SearchApplication(ctx, criteria.SearchCriteria)
+	res, err := c.service.SearchApplication(ctx, criteria.SearchCriteria, AuthToken)
 	if err != nil {
 		utils.WriteErrorResponse(w, http.StatusInternalServerError, err.Error())
 		return

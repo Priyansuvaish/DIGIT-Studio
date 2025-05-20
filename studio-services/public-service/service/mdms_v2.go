@@ -451,6 +451,10 @@ func mdmsSearchforReference(schema map[string]interface{}, referencesToFetch map
 			if !ok {
 				continue
 			}
+			// ✅ Filter by module
+			if dataModule, ok := data["module"].(string); !ok || dataModule != req.Application.Module {
+				continue
+			}
 
 			code, ok := data["code"].(string)
 			if !ok {

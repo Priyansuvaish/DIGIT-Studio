@@ -21,7 +21,7 @@ func (s *ApplicationService) CreateApplication(ctx context.Context, req model.Ap
 	return s.repo.CreateUsingKafka(ctx, req, ServiceCode)
 }
 
-func (s *ApplicationService) SearchApplication(ctx context.Context, criteria model.SearchCriteria) (model.SearchResponse, error) {
+func (s *ApplicationService) SearchApplication(ctx context.Context, criteria model.SearchCriteria, AuthToken string) (model.SearchResponse, error) {
 	resp, err := s.repo.SearchWithIndividual(ctx, criteria)
 	log.Println(resp)
 	if err != nil {

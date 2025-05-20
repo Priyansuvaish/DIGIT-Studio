@@ -23,10 +23,10 @@ type EnrichmentService struct {
 }
 
 func NewEnrichmentService(individualService *IndividualService, demandService *DemandService, mdmsService *MDMSService, mdmsServiceV2 *MDMSV2Service, idGenService *IdGenService, smsService *SMSService) *EnrichmentService {
-	return &EnrichmentService{individualService: individualService, DemandService: demandService, MDMSService: mdmsService, MDMSV2Service: mdmsServiceV2, IdGenService: idGenService,SMSService: smsService}
+	return &EnrichmentService{individualService: individualService, DemandService: demandService, MDMSService: mdmsService, MDMSV2Service: mdmsServiceV2, IdGenService: idGenService, SMSService: smsService}
 }
 
-func (s *EnrichmentService) EnrichApplicationsWithIndividuals(apps []model.Application, criteria model.SearchCriteria) []model.Application {
+func (s *EnrichmentService) EnrichApplicationsWithIndividuals(apps []model.Application, criteria model.SearchCriteria, AuthToken string) []model.Application {
 	userCache := make(map[string]individual.Individual)
 
 	for aIndex, app := range apps {
@@ -44,7 +44,7 @@ func (s *EnrichmentService) EnrichApplicationsWithIndividuals(apps []model.Appli
 				"uuid":     applicant.UserId,
 				"tenantId": criteria.TenantId,
 			}
-			indResp := s.individualService.GetIndividual(model.RequestInfo{}, criteria)
+			indResp := s.individualService.GetIndividual(model.RequestInfo{AuthToken: AuthToken}, criteria)
 			if jsonBytes, err := json.MarshalIndent(indResp, "", "  "); err == nil {
 				log.Printf("Indiviual response:\n%s\n", string(jsonBytes))
 			} else {
