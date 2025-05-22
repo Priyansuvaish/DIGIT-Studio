@@ -32,7 +32,7 @@ func (s *ApplicationService) SearchApplication(ctx context.Context, criteria mod
 	} else {
 		log.Printf("Search Application respons (raw): %+v\n", resp)
 	}
-	resp.Application = s.enrichmentService.EnrichApplicationsWithIndividuals(resp.Application, criteria)
+	resp.Application = s.enrichmentService.EnrichApplicationsWithIndividuals(resp.Application, criteria,AuthToken)
 	return resp, nil
 }
 
